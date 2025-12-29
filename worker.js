@@ -208,6 +208,18 @@ function buildReplyCard(data) {
             },
             {
               decoratedText: {
+                topLabel: "Requester",
+                text: data.requester || "Unknown"
+              }
+            },
+            {
+              decoratedText: {
+                topLabel: "Priority",
+                text: data.priority || "Not set"
+              }
+            },
+            {
+              decoratedText: {
                 topLabel: data.repliedBy || "Reply",
                 text: data.replyContent || "No content"
               }
