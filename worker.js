@@ -136,6 +136,30 @@ function extractReplyContent(body) {
 }
 
 function buildNewTicketCard(data) {
+  const widgets = [];
+
+  if (data.subject) {
+    widgets.push({ decoratedText: { topLabel: "Subject", text: data.subject } });
+  }
+  if (data.requester) {
+    widgets.push({ decoratedText: { topLabel: "Requester", text: data.requester } });
+  }
+  if (data.priority) {
+    widgets.push({ decoratedText: { topLabel: "Priority", text: data.priority } });
+  }
+  if (data.description) {
+    widgets.push({ decoratedText: { topLabel: "Description", text: data.description } });
+  }
+
+  widgets.push({
+    buttonList: {
+      buttons: [{
+        text: "Open Ticket",
+        onClick: { openLink: { url: data.ticketUrl || FALLBACK_URL } }
+      }]
+    }
+  });
+
   return {
     cardsV2: [{
       cardId: "new-ticket",
@@ -144,52 +168,37 @@ function buildNewTicketCard(data) {
           title: `🎫 New Ticket #${data.ticketId}`,
           subtitle: data.client || "Unknown client"
         },
-        sections: [{
-          widgets: [
-            {
-              decoratedText: {
-                topLabel: "Subject",
-                text: data.subject || "No subject"
-              }
-            },
-            {
-              decoratedText: {
-                topLabel: "Requester",
-                text: data.requester || "Unknown"
-              }
-            },
-            {
-              decoratedText: {
-                topLabel: "Priority",
-                text: data.priority || "Not set"
-              }
-            },
-            {
-              decoratedText: {
-                topLabel: "Description",
-                text: data.description || "No description"
-              }
-            },
-            {
-              buttonList: {
-                buttons: [{
-                  text: "Open Ticket",
-                  onClick: {
-                    openLink: {
-                      url: data.ticketUrl || FALLBACK_URL
-                    }
-                  }
-                }]
-              }
-            }
-          ]
-        }]
+        sections: [{ widgets }]
       }
     }]
   };
 }
 
 function buildReplyCard(data) {
+  const widgets = [];
+
+  if (data.subject) {
+    widgets.push({ decoratedText: { topLabel: "Subject", text: data.subject } });
+  }
+  if (data.requester) {
+    widgets.push({ decoratedText: { topLabel: "Requester", text: data.requester } });
+  }
+  if (data.priority) {
+    widgets.push({ decoratedText: { topLabel: "Priority", text: data.priority } });
+  }
+  if (data.replyContent) {
+    widgets.push({ decoratedText: { topLabel: data.repliedBy || "Reply", text: data.replyContent } });
+  }
+
+  widgets.push({
+    buttonList: {
+      buttons: [{
+        text: "Open Ticket",
+        onClick: { openLink: { url: data.ticketUrl || FALLBACK_URL } }
+      }]
+    }
+  });
+
   return {
     cardsV2: [{
       cardId: "ticket-reply",
@@ -198,46 +207,7 @@ function buildReplyCard(data) {
           title: `💬 Reply on #${data.ticketId}`,
           subtitle: data.client || "Unknown client"
         },
-        sections: [{
-          widgets: [
-            {
-              decoratedText: {
-                topLabel: "Subject",
-                text: data.subject || "No subject"
-              }
-            },
-            {
-              decoratedText: {
-                topLabel: "Requester",
-                text: data.requester || "Unknown"
-              }
-            },
-            {
-              decoratedText: {
-                topLabel: "Priority",
-                text: data.priority || "Not set"
-              }
-            },
-            {
-              decoratedText: {
-                topLabel: data.repliedBy || "Reply",
-                text: data.replyContent || "No content"
-              }
-            },
-            {
-              buttonList: {
-                buttons: [{
-                  text: "Open Ticket",
-                  onClick: {
-                    openLink: {
-                      url: data.ticketUrl || FALLBACK_URL
-                    }
-                  }
-                }]
-              }
-            }
-          ]
-        }]
+        sections: [{ widgets }]
       }
     }]
   };
