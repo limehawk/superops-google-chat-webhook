@@ -89,9 +89,6 @@ Description:
 #Description
 
 #Ticket link
-
-Cheers,
-#Organization email signature
 ```
 
 ### Reply Template
@@ -112,9 +109,6 @@ Reply from: #Replied By
 #Reply
 
 #Ticket link
-
-Cheers,
-#Organization email signature
 ```
 
 ---
