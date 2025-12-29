@@ -57,9 +57,12 @@ function parseTicketData(body, isReply) {
   return {
     ticketId: cleanText(extractAfterLabel(body, "Ticket #:") || extractAfterLabel(body, "ticket #")).replace(/\.$/, ""),
     client: cleanText(extractAfterLabel(body, "Client:")),
+    site: cleanText(extractAfterLabel(body, "Site:")),
     subject: cleanText(extractAfterLabel(body, "Subject:")),
     ticketUrl: extractUrl(body),
     priority: cleanText(extractAfterLabel(body, "Priority:")),
+    category: cleanText(extractAfterLabel(body, "Category:")),
+    status: cleanText(extractAfterLabel(body, "Status:")),
     requester: cleanText(extractAfterLabel(body, "Requester:")),
     description: extractDescription(body),
     repliedBy: cleanText(extractAfterLabel(body, "Reply from:")),
@@ -141,11 +144,17 @@ function buildNewTicketCard(data) {
   if (data.client) {
     widgets.push({ decoratedText: { topLabel: "🏢 Client", text: data.client } });
   }
+  if (data.site) {
+    widgets.push({ decoratedText: { topLabel: "📍 Site", text: data.site } });
+  }
   if (data.requester) {
     widgets.push({ decoratedText: { topLabel: "👤 Requester", text: data.requester } });
   }
   if (data.priority) {
     widgets.push({ decoratedText: { topLabel: "🚨 Priority", text: data.priority } });
+  }
+  if (data.category) {
+    widgets.push({ decoratedText: { topLabel: "📂 Category", text: data.category } });
   }
   if (data.description) {
     widgets.push({ decoratedText: { topLabel: "📝 Description", text: data.description } });
@@ -180,11 +189,17 @@ function buildReplyCard(data) {
   if (data.client) {
     widgets.push({ decoratedText: { topLabel: "🏢 Client", text: data.client } });
   }
+  if (data.site) {
+    widgets.push({ decoratedText: { topLabel: "📍 Site", text: data.site } });
+  }
   if (data.requester) {
     widgets.push({ decoratedText: { topLabel: "👤 Requester", text: data.requester } });
   }
   if (data.priority) {
     widgets.push({ decoratedText: { topLabel: "🚨 Priority", text: data.priority } });
+  }
+  if (data.status) {
+    widgets.push({ decoratedText: { topLabel: "📋 Status", text: data.status } });
   }
   if (data.replyContent) {
     widgets.push({ decoratedText: { topLabel: `💬 ${data.repliedBy || "Reply"}`, text: data.replyContent } });

@@ -79,8 +79,10 @@ A new ticket has been submitted.
 
 Ticket #: #Ticket ID
 Client: #Client name
+Site: #Site name
 Requester: #Requester name
 Priority: #Ticket priority
+Category: #Ticket category
 Subject: #Subject
 
 Description:
@@ -100,8 +102,10 @@ Hi #Technician name,
 You have a new reply on ticket ##Ticket ID.
 
 Client: #Client name
+Site: #Site name
 Requester: #Requester name
 Priority: #Ticket priority
+Status: #Ticket status
 Subject: #Subject
 Reply from: #Replied By
 
