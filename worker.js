@@ -103,8 +103,8 @@ function extractDescription(body) {
     .replace(/\s+/g, " ")
     .trim();
 
-  if (content.length > 200) {
-    content = content.substring(0, 200).trim() + "...";
+  if (content.length > 500) {
+    content = content.substring(0, 500).trim() + "...";
   }
 
   return content;
@@ -128,8 +128,8 @@ function extractReplyContent(body) {
     .replace(/\s+/g, " ")
     .trim();
 
-  if (content.length > 200) {
-    content = content.substring(0, 200).trim() + "...";
+  if (content.length > 500) {
+    content = content.substring(0, 500).trim() + "...";
   }
 
   return content || "No content";

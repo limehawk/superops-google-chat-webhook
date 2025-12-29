@@ -143,5 +143,5 @@ Cheers,
 
 ## Notes
 
-- Reply content truncates at 200 characters (Google Chat limitation)
+- Content truncates at 500 characters to keep cards readable
 - Using a subdomain keeps your main domain's email (Google Workspace, etc.) working normally
