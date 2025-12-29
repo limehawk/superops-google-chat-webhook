@@ -100,6 +100,8 @@ Hi #Technician name,
 You have a new reply on ticket ##Ticket ID.
 
 Client: #Client name
+Requester: #Requester name
+Priority: #Ticket priority
 Subject: #Subject
 Reply from: #Replied By
 
