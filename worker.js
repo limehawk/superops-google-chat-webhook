@@ -55,7 +55,7 @@ function cleanText(text) {
 
 function parseTicketData(body, isReply) {
   return {
-    ticketId: cleanText(extractAfterLabel(body, "Ticket #:") || extractAfterLabel(body, "ticket #")),
+    ticketId: cleanText(extractAfterLabel(body, "Ticket #:") || extractAfterLabel(body, "ticket #")).replace(/\.$/, ""),
     client: cleanText(extractAfterLabel(body, "Client:")),
     subject: cleanText(extractAfterLabel(body, "Subject:")),
     ticketUrl: extractUrl(body),
