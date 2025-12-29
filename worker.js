@@ -138,23 +138,23 @@ function extractReplyContent(body) {
 function buildNewTicketCard(data) {
   const widgets = [];
 
-  if (data.subject) {
-    widgets.push({ decoratedText: { topLabel: "Subject", text: data.subject } });
+  if (data.client) {
+    widgets.push({ decoratedText: { topLabel: "🏢 Client", text: data.client } });
   }
   if (data.requester) {
-    widgets.push({ decoratedText: { topLabel: "Requester", text: data.requester } });
+    widgets.push({ decoratedText: { topLabel: "👤 Requester", text: data.requester } });
   }
   if (data.priority) {
-    widgets.push({ decoratedText: { topLabel: "Priority", text: data.priority } });
+    widgets.push({ decoratedText: { topLabel: "🚨 Priority", text: data.priority } });
   }
   if (data.description) {
-    widgets.push({ decoratedText: { topLabel: "Description", text: data.description } });
+    widgets.push({ decoratedText: { topLabel: "📝 Description", text: data.description } });
   }
 
   widgets.push({
     buttonList: {
       buttons: [{
-        text: "Open Ticket",
+        text: "🔗 Open Ticket",
         onClick: { openLink: { url: data.ticketUrl || FALLBACK_URL } }
       }]
     }
@@ -165,8 +165,8 @@ function buildNewTicketCard(data) {
       cardId: "new-ticket",
       card: {
         header: {
-          title: `🎫 New Ticket #${data.ticketId}`,
-          subtitle: data.client || "Unknown client"
+          title: `🎫 #${data.ticketId}: ${data.subject || "No subject"}`,
+          subtitle: "New Ticket"
         },
         sections: [{ widgets }]
       }
@@ -177,23 +177,23 @@ function buildNewTicketCard(data) {
 function buildReplyCard(data) {
   const widgets = [];
 
-  if (data.subject) {
-    widgets.push({ decoratedText: { topLabel: "Subject", text: data.subject } });
+  if (data.client) {
+    widgets.push({ decoratedText: { topLabel: "🏢 Client", text: data.client } });
   }
   if (data.requester) {
-    widgets.push({ decoratedText: { topLabel: "Requester", text: data.requester } });
+    widgets.push({ decoratedText: { topLabel: "👤 Requester", text: data.requester } });
   }
   if (data.priority) {
-    widgets.push({ decoratedText: { topLabel: "Priority", text: data.priority } });
+    widgets.push({ decoratedText: { topLabel: "🚨 Priority", text: data.priority } });
   }
   if (data.replyContent) {
-    widgets.push({ decoratedText: { topLabel: data.repliedBy || "Reply", text: data.replyContent } });
+    widgets.push({ decoratedText: { topLabel: `💬 ${data.repliedBy || "Reply"}`, text: data.replyContent } });
   }
 
   widgets.push({
     buttonList: {
       buttons: [{
-        text: "Open Ticket",
+        text: "🔗 Open Ticket",
         onClick: { openLink: { url: data.ticketUrl || FALLBACK_URL } }
       }]
     }
@@ -204,8 +204,8 @@ function buildReplyCard(data) {
       cardId: "ticket-reply",
       card: {
         header: {
-          title: `💬 Reply on #${data.ticketId}`,
-          subtitle: data.client || "Unknown client"
+          title: `💬 #${data.ticketId}: ${data.subject || "No subject"}`,
+          subtitle: "Ticket Reply"
         },
         sections: [{ widgets }]
       }
