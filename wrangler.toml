@@ -3,7 +3,7 @@
 # =============================================================================
 name = "helpdesk-tickets"  # <-- Change this to your preferred worker name
 
-main = "src/index.js"
+main = "worker.js"
 compatibility_date = "2025-01-01"
 
 # After deploying, set the Google Chat webhook secret:

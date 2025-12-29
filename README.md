@@ -9,54 +9,66 @@ Cloudflare Email Worker that receives BCC'd emails from SuperOps ticket notifica
 3. Worker parses the email and extracts ticket data
 4. Formatted card is posted to Google Chat via webhook
 
-## Setup
+## Quick Start
 
-### 1. Cloudflare Email Routing
+### Step 1: Get Your Google Chat Webhook URL
 
-Set up email routing for your domain or subdomain:
+1. Open Google Chat
+2. Go to the space where you want notifications
+3. Click the space name → **Apps & Integrations** → **Webhooks**
+4. Click **Create webhook**, give it a name, copy the URL
+5. Save this URL for Step 4
 
-1. Cloudflare Dashboard → Email Routing → Settings
-2. Add your domain/subdomain for email routing
-3. Configure MX and TXT records as prompted
+### Step 2: Set Up Cloudflare Email Routing
 
-### 2. Create the Email Worker
+1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
+2. Select your domain → **Email Routing** → **Settings**
+3. Add a subdomain for email routing (e.g., `notifications.yourdomain.com`)
+4. Add the MX and TXT records Cloudflare shows you
 
-1. Cloudflare Dashboard → Email Routing → Email Workers → Create
-2. Copy the contents of `src/index.js` into the editor
-3. Update `SUPEROPS_DOMAIN` at the top to your SuperOps instance:
+### Step 3: Create the Email Worker
+
+1. **Email Routing** → **Email Workers** → **Create**
+2. Name it whatever you want (e.g., `superops-tickets`)
+3. Delete the default code
+4. Copy everything from `worker.js` in this repo and paste it in
+5. **IMPORTANT:** Change line 6 to your SuperOps domain:
    ```javascript
-   const SUPEROPS_DOMAIN = "my.yourcompany.io";  // <-- Change this
+   const SUPEROPS_DOMAIN = "my.yourcompany.io";  // <-- YOUR DOMAIN HERE
    ```
-4. Save and deploy
+6. Click **Save and deploy**
 
-### 3. Add the Webhook Secret
+### Step 4: Add the Webhook Secret
 
-1. Workers & Pages → your worker → Settings → Variables
-2. Add environment variable: `GCHAT_WEBHOOK`
-3. Paste your Google Chat webhook URL
-4. Click "Encrypt" to make it a secret
+1. **Workers & Pages** → click your worker → **Settings** → **Variables**
+2. Under "Environment Variables", click **Add variable**
+3. Variable name: `GCHAT_WEBHOOK`
+4. Value: paste the webhook URL from Step 1
+5. Click **Encrypt** (important!)
+6. Click **Save**
 
-### 4. Create Email Routing Rule
+### Step 5: Create Email Routing Rule
 
-1. Email Routing → Routing rules → Create address
-2. Custom address (e.g., `tickets`)
-3. Action: Send to Worker → select your worker
+1. **Email Routing** → **Routing rules** → **Create address**
+2. Custom address: `tickets` (or whatever you want)
+3. Action: **Send to a Worker** → select your worker
+4. Click **Save**
 
-### 5. Google Chat Webhook
+Your email address is now: `tickets@notifications.yourdomain.com`
 
-1. Open your Google Chat space
-2. Apps & Integrations → Webhooks → Create
-3. Copy the webhook URL for step 3 above
+### Step 6: Configure SuperOps
 
-### 6. SuperOps Configuration
+1. Go to SuperOps → **Settings** → **Notifications**
+2. Edit your ticket notification templates (see templates below)
+3. Add your worker email to the BCC field: `tickets@notifications.yourdomain.com`
 
-1. Update notification templates (see below)
-2. Add your worker email address to BCC on ticket notifications
-   - Example: `tickets@notifications.yourdomain.com`
+Done! New tickets and replies will now post to Google Chat.
+
+---
 
 ## SuperOps Email Templates
 
-These templates are required for the worker to parse emails correctly.
+**You must use these exact templates** for the worker to parse emails correctly.
 
 ### New Ticket Template
 
@@ -99,30 +111,35 @@ Cheers,
 #Organization email signature
 ```
 
-## Configuration
+---
 
-| Item | Location | Description |
-|------|----------|-------------|
-| `SUPEROPS_DOMAIN` | `src/index.js` | Your SuperOps instance domain |
-| `GCHAT_WEBHOOK` | Worker Settings → Variables | Google Chat webhook URL (encrypt as secret) |
+## Configuration Reference
 
-## Notes
+| What to change | Where | Example |
+|----------------|-------|---------|
+| SuperOps domain | `worker.js` line 6 | `my.yourcompany.io` |
+| Google Chat webhook | Cloudflare Worker Variables | `https://chat.googleapis.com/v1/spaces/...` |
 
-- Reply content truncates at 200 chars (Google Chat card limitation)
-- Email signatures get included but truncated - users click "Open Ticket" for full content
-- Worker strips quoted-printable encoding and HTML artifacts
-- Using a subdomain for email routing keeps existing email services on main domain intact
+---
 
 ## Troubleshooting
 
-**Emails not arriving at worker:**
-- Check MX records are configured for your email domain
-- Verify routing rule is active and points to correct worker
+**Not getting any notifications?**
+- Check your MX records are set up correctly for the subdomain
+- Verify the routing rule points to your worker
+- Make sure the BCC address in SuperOps matches your routing rule
 
-**Ticket data not parsing:**
-- Ensure SuperOps templates match exactly (labels like "Ticket #:", "Client:", etc.)
-- Check worker logs in Cloudflare dashboard
+**Getting notifications but data is wrong/missing?**
+- Make sure your SuperOps templates match exactly (copy/paste from above)
+- The labels like `Ticket #:`, `Client:`, `Priority:` must be exact
 
-**Cards not posting to Google Chat:**
-- Verify `GCHAT_WEBHOOK` variable is set and encrypted
-- Check webhook URL is still valid in Google Chat space
+**Worker errors in Cloudflare logs?**
+- Check `GCHAT_WEBHOOK` variable is set and encrypted
+- Verify your Google Chat webhook URL is still valid
+
+---
+
+## Notes
+
+- Reply content truncates at 200 characters (Google Chat limitation)
+- Using a subdomain keeps your main domain's email (Google Workspace, etc.) working normally
