@@ -11,24 +11,7 @@ Cloudflare Email Worker that receives BCC'd emails from SuperOps ticket notifica
 
 ## Setup
 
-### 1. Configure the Worker
-
-Edit `src/index.js` and update the configuration at the top:
-
-```javascript
-// Your SuperOps subdomain (e.g., "my.yourcompany.io" or "app.superops.ai")
-const SUPEROPS_DOMAIN = "my.yourcompany.io";  // <-- Change this
-```
-
-### 2. Configure Wrangler
-
-Edit `wrangler.toml` and set your worker name:
-
-```toml
-name = "your-worker-name"  # <-- Change this
-```
-
-### 3. Cloudflare Email Routing
+### 1. Cloudflare Email Routing
 
 Set up email routing for your domain or subdomain:
 
@@ -36,30 +19,36 @@ Set up email routing for your domain or subdomain:
 2. Add your domain/subdomain for email routing
 3. Configure MX and TXT records as prompted
 
-### 4. Deploy the Worker
+### 2. Create the Email Worker
 
-```bash
-npm install -g wrangler
-wrangler login
-wrangler deploy
-wrangler secret put GCHAT_WEBHOOK
-# Paste your Google Chat webhook URL when prompted
-```
+1. Cloudflare Dashboard → Email Routing → Email Workers → Create
+2. Copy the contents of `src/index.js` into the editor
+3. Update `SUPEROPS_DOMAIN` at the top to your SuperOps instance:
+   ```javascript
+   const SUPEROPS_DOMAIN = "my.yourcompany.io";  // <-- Change this
+   ```
+4. Save and deploy
 
-### 5. Create Email Routing Rule
+### 3. Add the Webhook Secret
 
-1. Cloudflare Dashboard → Email Routing → Routing rules
-2. Create custom address (e.g., `tickets`)
-3. Action: Send to Worker → select your deployed worker
+1. Workers & Pages → your worker → Settings → Variables
+2. Add environment variable: `GCHAT_WEBHOOK`
+3. Paste your Google Chat webhook URL
+4. Click "Encrypt" to make it a secret
 
-### 6. Google Chat Webhook
+### 4. Create Email Routing Rule
+
+1. Email Routing → Routing rules → Create address
+2. Custom address (e.g., `tickets`)
+3. Action: Send to Worker → select your worker
+
+### 5. Google Chat Webhook
 
 1. Open your Google Chat space
 2. Apps & Integrations → Webhooks → Create
-3. Copy the webhook URL
-4. Add as `GCHAT_WEBHOOK` secret (step 4 above)
+3. Copy the webhook URL for step 3 above
 
-### 7. SuperOps Configuration
+### 6. SuperOps Configuration
 
 1. Update notification templates (see below)
 2. Add your worker email address to BCC on ticket notifications
@@ -110,13 +99,12 @@ Cheers,
 #Organization email signature
 ```
 
-## Configuration Reference
+## Configuration
 
 | Item | Location | Description |
 |------|----------|-------------|
 | `SUPEROPS_DOMAIN` | `src/index.js` | Your SuperOps instance domain |
-| `name` | `wrangler.toml` | Cloudflare Worker name |
-| `GCHAT_WEBHOOK` | Cloudflare secret | Google Chat webhook URL |
+| `GCHAT_WEBHOOK` | Worker Settings → Variables | Google Chat webhook URL (encrypt as secret) |
 
 ## Notes
 
@@ -136,5 +124,5 @@ Cheers,
 - Check worker logs in Cloudflare dashboard
 
 **Cards not posting to Google Chat:**
-- Verify `GCHAT_WEBHOOK` secret is set correctly
+- Verify `GCHAT_WEBHOOK` variable is set and encrypted
 - Check webhook URL is still valid in Google Chat space
