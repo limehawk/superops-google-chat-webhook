@@ -1,0 +1,10 @@
+# =============================================================================
+# CONFIGURATION - Update the worker name for your deployment
+# =============================================================================
+name = "helpdesk-tickets"  # <-- Change this to your preferred worker name
+
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# After deploying, set the Google Chat webhook secret:
+# wrangler secret put GCHAT_WEBHOOK
