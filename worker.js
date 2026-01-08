@@ -139,91 +139,51 @@ function extractReplyContent(body) {
 }
 
 function buildNewTicketCard(data) {
-  const widgets = [];
+  const lines = [];
 
-  if (data.client) {
-    widgets.push({ decoratedText: { topLabel: "🏢 Client", text: data.client } });
-  }
-  if (data.site) {
-    widgets.push({ decoratedText: { topLabel: "📍 Site", text: data.site } });
-  }
-  if (data.requester) {
-    widgets.push({ decoratedText: { topLabel: "👤 Requester", text: data.requester } });
-  }
-  if (data.priority) {
-    widgets.push({ decoratedText: { topLabel: "🚨 Priority", text: data.priority } });
-  }
-  if (data.category) {
-    widgets.push({ decoratedText: { topLabel: "📂 Category", text: data.category } });
-  }
+  lines.push(`🎫 *New Ticket #${data.ticketId}*`);
+  lines.push(`*${data.subject || "No subject"}*`);
+  lines.push("");
+
+  if (data.client) lines.push(`🏢 Client: ${data.client}`);
+  if (data.site) lines.push(`📍 Site: ${data.site}`);
+  if (data.requester) lines.push(`👤 Requester: ${data.requester}`);
+  if (data.priority) lines.push(`🚨 Priority: ${data.priority}`);
+  if (data.category) lines.push(`📂 Category: ${data.category}`);
+
   if (data.description) {
-    widgets.push({ decoratedText: { topLabel: "📝 Description", text: data.description } });
+    lines.push("");
+    lines.push(`📝 Description:`);
+    lines.push(data.description);
   }
 
-  widgets.push({
-    buttonList: {
-      buttons: [{
-        text: "🔗 Open Ticket",
-        onClick: { openLink: { url: data.ticketUrl || FALLBACK_URL } }
-      }]
-    }
-  });
+  lines.push("");
+  lines.push(`🔗 ${data.ticketUrl || FALLBACK_URL}`);
 
-  return {
-    cardsV2: [{
-      cardId: "new-ticket",
-      card: {
-        header: {
-          title: `🎫 #${data.ticketId}: ${data.subject || "No subject"}`,
-          subtitle: "New Ticket"
-        },
-        sections: [{ widgets }]
-      }
-    }]
-  };
+  return { text: lines.join("\n") };
 }
 
 function buildReplyCard(data) {
-  const widgets = [];
+  const lines = [];
 
-  if (data.client) {
-    widgets.push({ decoratedText: { topLabel: "🏢 Client", text: data.client } });
-  }
-  if (data.site) {
-    widgets.push({ decoratedText: { topLabel: "📍 Site", text: data.site } });
-  }
-  if (data.requester) {
-    widgets.push({ decoratedText: { topLabel: "👤 Requester", text: data.requester } });
-  }
-  if (data.priority) {
-    widgets.push({ decoratedText: { topLabel: "🚨 Priority", text: data.priority } });
-  }
-  if (data.status) {
-    widgets.push({ decoratedText: { topLabel: "📋 Status", text: data.status } });
-  }
+  lines.push(`💬 *Ticket Reply #${data.ticketId}*`);
+  lines.push(`*${data.subject || "No subject"}*`);
+  lines.push("");
+
+  if (data.client) lines.push(`🏢 Client: ${data.client}`);
+  if (data.site) lines.push(`📍 Site: ${data.site}`);
+  if (data.requester) lines.push(`👤 Requester: ${data.requester}`);
+  if (data.priority) lines.push(`🚨 Priority: ${data.priority}`);
+  if (data.status) lines.push(`📋 Status: ${data.status}`);
+
   if (data.replyContent) {
-    widgets.push({ decoratedText: { topLabel: `💬 ${data.repliedBy || "Reply"}`, text: data.replyContent } });
+    lines.push("");
+    lines.push(`💬 ${data.repliedBy || "Reply"}:`);
+    lines.push(data.replyContent);
   }
 
-  widgets.push({
-    buttonList: {
-      buttons: [{
-        text: "🔗 Open Ticket",
-        onClick: { openLink: { url: data.ticketUrl || FALLBACK_URL } }
-      }]
-    }
-  });
+  lines.push("");
+  lines.push(`🔗 ${data.ticketUrl || FALLBACK_URL}`);
 
-  return {
-    cardsV2: [{
-      cardId: "ticket-reply",
-      card: {
-        header: {
-          title: `💬 #${data.ticketId}: ${data.subject || "No subject"}`,
-          subtitle: "Ticket Reply"
-        },
-        sections: [{ widgets }]
-      }
-    }]
-  };
+  return { text: lines.join("\n") };
 }
